@@ -1,5 +1,12 @@
 # Testing the website
 
+## Anchored statistics arrivals — 11 October 2026
+
+- All 256 focused analytics checks pass across iPhone WebKit, Android Chromium, desktop Chromium and desktop WebKit. New regressions cover direct and both real generated legacy-redirect arrivals at three sections, exactly one aggregate page open, no Umami, clear heading placement and refusal focus. All external submissions are intercepted.
+- All 71 Python checks, five real-SQLite backend checks and 117-file public staging pass. Independent privacy and rendered UX reviews have no remaining actionable findings; reviewed 320/390/1440 layouts, enlarged text, typing, menus and Back.
+- Native iPhone 17 Pro/iOS 26.5 Safari Simulator, isolated local preview: Choices opened by touch, dismissal restored the page, section navigation retained the visible notice, and Off removed it at the current section. No forms or collector requests were submitted. Exact-revision complete hosted gates and live receipt of this correction remain pending.
+
+
 ## Aggregate statistics candidate — 10 October 2026
 
 - Backend: five Node tests against actual in-memory SQLite pass, covering atomic aggregate increments, strict label/property/origin/privacy/size rejection, failures and retention. Schema contains only daily counters. Seventy Python privacy/security/packaging tests pass.
