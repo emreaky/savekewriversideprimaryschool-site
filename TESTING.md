@@ -1,5 +1,11 @@
 # Testing the website
 
+## Campaign search discovery — 11 October 2026
+
+- All 76 Python privacy/security/data/artifact tests and five real-SQLite backend tests pass. New regressions cover curated XML membership, self-canonicals/noindex, stale generated assets, head/body boundaries, actual chart labels, generator idempotence and legacy exclusions. Navigation, comparison, research and SEO freshness, JavaScript syntax and whitespace checks pass. Staging contains exactly 119 public files, excluding maintenance and private operations material.
+- All 15 new crawl-serving checks pass across the five browser projects: GET/HEAD, XML/plain-text MIME and every sitemap destination's status/indexability/canonical. Complete local browser suite and exact-revision hosted release gates remain pending.
+- Independent campaign, UX and evidence actual-diff reviews have no remaining actionable findings. Evidence checked all 22 restored SVG labels against maintained source values, council leaflet and archived original Reception report text; direct live access to the latter PDF failed. Structural comparison confirms unchanged page bodies except chart labels. No layout/touch/focus/navigation behavior changed, so no new native iOS or unfamiliar-person trial was required. Search Console ownership, sitemap processing, URL inspections and live publication are not yet verified.
+
 ## Anchored statistics arrivals — 11 October 2026
 
 - All 256 focused analytics checks pass across iPhone WebKit, Android Chromium, desktop Chromium and desktop WebKit. New regressions cover direct and both real generated legacy-redirect arrivals at three sections, exactly one aggregate page open, no Umami, clear heading placement and refusal focus. All external submissions are intercepted.

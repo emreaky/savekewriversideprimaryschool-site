@@ -2,6 +2,13 @@
 
 ## Unreleased
 
+### Campaign search discovery — 11 October 2026
+
+- Add a curated ten-page canonical sitemap and permissive robots file. Keep recruitment, form-focused routes, exports and noindex pages out of this initial campaign sitemap; leave existing routes and permissions intact. Canonical SEO files are excluded from both legacy bundles.
+- Give seven existing campaign pages specific search/social titles and descriptions, retaining the independent publisher and process/financial/research qualifications. Keep metadata replacement inside the head; restore 22 Evidence chart-point labels corrupted by the earlier global title replacement.
+- Add homepage Search Console ownership metadata, crawl-asset GET/HEAD/MIME and packaging regressions, plus the stage-change and weekly-review operating checklist. Account exports and outreach drafts remain private. No outreach, later campaign stage or search growth is claimed.
+- Implementation validation, independent actual-diff reviews and exact-revision release/live evidence are recorded in TESTING.md and the implementation pull request as completed.
+
 ### Count arrivals at shared sections — 11 October 2026
 
 - Confirmed old-home and GitHub-letter redirects reach the canonical site, but fresh visitors arriving at a section could remain uncounted because the first-visit notice was above the viewport.

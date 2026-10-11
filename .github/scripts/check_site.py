@@ -11,6 +11,7 @@ from public_data import validate_board
 
 ROOT = Path(__file__).resolve().parents[2]
 PUBLIC_FILES = frozenset('''
+sitemap.xml robots.txt
 images/school-discovery-480.jpg images/school-discovery-960.jpg images/school-project-480.jpg images/school-project-960.jpg
 rally.html rally.css rally-6-october.ics
 fundraising-trustees.html fundraising-admin.html fundraising-briefs.css
@@ -31,6 +32,7 @@ og-home.png og-letters.png og-ideas.png og-videos.png
 og-fundraising-trustees-v1.png og-fundraising-admin-v1.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+SEO-OPERATIONS.md .github/scripts/build_seo.py .github/scripts/test_seo.py tests/browser/seo.spec.js
 SEO-IMPLEMENTATION-PLAN.md
 tests/browser/campaign.spec.js
 .github/scripts/compatibility-assets.json .github/scripts/compatibility_release.py .github/scripts/test_compatibility_release.py CONSOLIDATION.md

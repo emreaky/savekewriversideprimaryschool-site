@@ -84,12 +84,12 @@ def render_identity(name, document):
         'index.html': SITE_NAME,
         'letters.html': 'Community letters',
         'about.html': 'Our story & contact',
-        'proposal.html': 'Proposal, dates & who decides',
-        'understand.html': 'Numbers & results: Richmond school data',
-        'faq.html': 'Your questions answered',
-        'evidence.html': 'Evidence and sources',
-        'options.html': 'Ways to keep Kew Riverside Primary School open',
-        'lessons.html': 'Lessons from other schools',
+        'proposal.html': 'Kew Riverside Primary School closure proposal: consultation and dates',
+        'understand.html': 'Kew Riverside Primary School finances and pupil numbers',
+        'faq.html': 'Kew Riverside closure proposal: answers for families',
+        'evidence.html': 'Kew Riverside closure proposal: evidence and sources',
+        'options.html': 'Alternatives to closing Kew Riverside Primary School',
+        'lessons.html': 'School closure reprieves: selected cases and lessons for Kew',
         'lessons-sources.html': 'Research citations',
         'feedback.html': 'Ideas, evidence & questions',
         'videos.html': 'Parent testimonials',
@@ -101,6 +101,21 @@ def render_identity(name, document):
         'fundraising-trustees.html': 'Trustee brief',
         'fundraising-admin.html': 'Account setup brief',
     }
+    descriptions = {
+        'index.html': 'Find the Kew Riverside Primary School closure proposal, consultation dates, evidence and parent action plan, plus reviewed community letters.',
+        'proposal.html': 'Understand the proposed closure of Kew Riverside Primary School, the consultation process, who decides and the parent action plan. Responses are due by 16 October 2026.',
+        'faq.html': 'Answers for families about the Kew Riverside Primary School closure proposal, consultation, school places and how to respond, with links to official sources.',
+        'understand.html': 'Explore dated Kew Riverside Primary School pupil figures, annual budget gaps and cumulative forecasts, alongside Richmond comparisons and source qualifications.',
+        'evidence.html': 'Read the sources behind the Kew Riverside Primary School closure proposal, including pupil forecasts, budget figures, official records and outstanding evidence requests.',
+        'options.html': 'Explore alternatives to closing Kew Riverside Primary School and the evidence needed to assess them, with practical next steps in the parent action plan.',
+        'lessons.html': 'Compare 12 selected reprieve schools across nine decision episodes with four closed schools. Examine the evidence, limits and lessons for Kew Riverside; reprieve does not establish lasting recovery.',
+    }
+    # Metadata belongs to the document head. Body SVG titles describe chart
+    # points and must survive both maintained-page and research regeneration.
+    document, separator, body = document.partition('</head>')
+    if not separator:
+        raise ValueError('Missing document head: '+name)
+    document += separator
     title = titles[name] + ('' if name == 'index.html' else ' | ' + SITE_NAME)
     document = re.sub(r'<title>.*?</title>', '<title>'+esc(title)+'</title>', document, flags=re.S)
     def meta(document, attribute, key, value):
@@ -112,7 +127,7 @@ def render_identity(name, document):
         # Research builders start with Proposal's head; use their own page description.
         source_attribute, source_key = ('name', 'description') if name in ('lessons.html', 'lessons-sources.html', 'understand.html') else (attribute, key)
         match = re.search(r'<meta '+source_attribute+'="'+source_key+r'" content="([^"]*)"', document)
-        description = html.unescape(match.group(1)) if match else titles[name]+'.'
+        description = descriptions.get(name, html.unescape(match.group(1)) if match else titles[name]+'.')
         prefix = 'Independent parent-led campaign. '
         if not description.startswith(prefix):
             description = prefix+description
@@ -133,6 +148,7 @@ def render_identity(name, document):
         document = meta(document, 'itemprop', 'name', SITE_NAME)
         document = re.sub(r'<link itemprop="url"[^>]*>', '', document)
         document = document.replace('</head>', '<link itemprop="url" href="'+SITE_URL+'"></head>', 1)
+    document += body
     def brand(match):
         opening = re.sub(r'aria-label="[^"]*"', 'aria-label="'+SITE_NAME+' home"', match.group(1))
         symbol = match.group(2).split('</svg>', 1)[0]+'</svg>'

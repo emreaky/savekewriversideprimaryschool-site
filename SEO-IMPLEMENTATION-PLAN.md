@@ -4,7 +4,7 @@ Prepared 10 October 2026 for member review. Repository baseline: `daa26e5` on `y
 
 The goal is to help people searching about Kew Riverside Primary School's proposed closure find reliable answers, understand the current process and reach the appropriate next step. Deliver the discovery and metadata work first, then improve the pages and links that actual search evidence shows are useful.
 
-This is an implementation plan, not a record of completed SEO work. The current change adds this document and registers it as maintenance documentation. Website implementation, account changes, outreach and release are subsequent tasks. A pushed planning branch does not publish a website change.
+This plan was prepared for member review on 10 October. Implementation began on 11 October against main `1ba610b`, preserving the later analytics releases. See [SEO operations](SEO-OPERATIONS.md) for the current delivery state, stage-change checklist and weekly review template. Checkboxes below are delivery criteria; release and account evidence are recorded separately.
 
 ## Scope and success
 
@@ -16,7 +16,7 @@ Success has three levels:
 
 1. **Delivery:** the selected canonical pages are discoverable, their metadata is accurate, the sitemap is accepted for processing and important URLs have been inspected in Search Console.
 2. **Search visibility:** relevant queries produce impressions and clicks to the appropriate current-domain pages. Establish the baseline before setting growth targets; no search volume, ranking or traffic uplift is assumed.
-3. **Visitor usefulness:** existing aggregate, consented analytics show which broad actions visitors open. Opening the official form does not establish a submitted response. Website contributions and consultation responses remain distinct outcomes.
+3. **Visitor usefulness:** default aggregate counters and optional consent-only Umami reports show broad actions opened, assessed separately. Opening the official form does not establish a submitted response. Website contributions and consultation responses remain distinct outcomes.
 
 ## Verified starting point
 
@@ -30,7 +30,7 @@ Success has three levels:
 | The latest source already generates campaign identity, metadata and a journalist route at `about.html#press`. | Extend the maintained generator and existing press section rather than creating competing versions. |
 | The official council page describes a pre-statutory proposal; its linked response form states 16 October 2026 as the response deadline. | Recheck the official position when implementing. Prepare a stage-change update for visible copy and metadata; do not infer a closing time or a final closure decision. |
 
-Use [CONSOLIDATION.md](CONSOLIDATION.md), current deployment configuration and live checks for the active domain. The journey register contains a historical paragraph naming the previous domain; its protected journey priorities remain authoritative. Correct that stale domain reference in the later documentation maintenance task without changing journey priorities.
+Use [CONSOLIDATION.md](CONSOLIDATION.md), current deployment configuration and live checks for the active domain. The journey register records the final full-name domain and preserves the protected journey priorities.
 
 ## Delivery sequence and responsibilities
 
@@ -177,7 +177,7 @@ Use a short aggregate review, with one accountable maintainer and an agreed back
 | Existing aggregate action opens | Which broad next steps are opened by measured visits? | Inspect the relevant journey; never count opens as completed responses |
 | Verified public links | Are credible local sources pointing to useful current pages? | Correct obsolete URLs and improve reference material |
 
-Search Console and consented onsite analytics cover different populations and definitions. Do not combine them into a precise end-to-end conversion rate, identify contributors or inspect individual sessions. Do not add search terms, letter IDs, form contents or sensitive topic classifications to the site's event payloads. Apply [ANALYTICS.md](ANALYTICS.md), including the existing exclusions and consent controls.
+Search Console, default aggregate counters and optional Umami reports cover different populations and definitions. Assess them separately; action opens are not unique people or completed responses. Default counters do not establish linked visitor journeys. Do not combine them into a precise end-to-end conversion rate, identify contributors or inspect individual sessions. Do not add search terms, letter IDs, form contents or sensitive topic classifications to the site's event payloads. Apply [ANALYTICS.md](ANALYTICS.md), including the existing exclusions and consent controls.
 
 After the first useful baseline, agree realistic directional targets. Prefer relevant clicks and answer usefulness over total traffic or a promised ranking. Low use alone is not a reason to remove a protected family or evidence route.
 
@@ -213,7 +213,7 @@ Before a material release, obtain the relevant specialists' review of the actual
 
 After a requested release, verify the live assets, selected pages, metadata, sitemap and protected routes against the intended commit. Only then record publication as verified. If there is a regression, revert the specific SEO change through the normal checked pipeline without restoring obsolete content or withdrawn contributions. A missing sitemap entry can be corrected without changing visitor URLs; revert problematic metadata to the latest accurate version.
 
-For this documentation-only change, run the Python validation suite and artifact staging checks, confirm the public asset bytes are unchanged from the baseline, and review the diff. No visitor interaction is changed, so no new browser test is warranted. Existing PR automation remains enabled; this task does not merge or deploy the plan branch.
+The original documentation-only planning PR left public assets unchanged. Implementation must pass the full release gates above, including the new crawl-asset serving and SVG-title regressions. Do not carry the planning-only validation claim forward as implementation evidence.
 
 ## Review record
 
@@ -221,7 +221,7 @@ The preceding strategy received independent campaign, UX and evidence planning r
 
 Independent campaign, UX and evidence review of this implementation plan completed on 10 October 2026. The reviewers read the actual draft, applicable instructions, protected journeys and relevant current source files. No blocking or material findings remained. The UX reviewer recommended making the conditional written-path and unfamiliar-person checks explicit; that addition is included in package D and applies to participation changes in D/F. These were read-only planning reviews, not implementation, live indexing or user-study verification.
 
-Documentation validation passed: 71 Python privacy/security/data/structure tests, local Markdown link checks and public artifact staging. All 117 staged public files were byte-identical to baseline `daa26e5`; this plan was absent from the staged website. Implementation tasks remain unchecked until delivered and verified. Hosted checks are reported on the pull request separately.
+Documentation validation passed: 71 Python privacy/security/data/structure tests, local Markdown link checks and public artifact staging. All 117 staged public files were byte-identical to baseline `daa26e5`; this plan was absent from the staged website. The original planning checks do not certify the later implementation. Current completed local checks and independent actual-diff reviews are recorded in TESTING.md; release/account outcomes remain separately pending. Hosted checks are reported on the pull request separately.
 
 ## Reference guidance
 
