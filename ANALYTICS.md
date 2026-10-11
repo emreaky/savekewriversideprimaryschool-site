@@ -2,14 +2,14 @@
 
 ## Two separate collectors — candidate, 10 October 2026
 
-The default tier uses an aggregate-only Cloudflare Worker and D1 database. The optional tier uses Umami Cloud only after an explicit detailed choice. The backend is deployed at `https://kew-riverside-statistics.analytics-backend.workers.dev`; its D1 binding, daily retention trigger and disabled Workers Logs/Traces were verified on 10 October. The candidate enables `counterEnabled`. **Website release and actual browser receipt are pending.**
+The default tier uses an aggregate-only Cloudflare Worker and D1 database. The optional tier uses Umami Cloud only after an explicit detailed choice. The backend is deployed at `https://kew-riverside-statistics.analytics-backend.workers.dev`; its D1 binding, daily retention trigger and disabled Workers Logs/Traces were verified on 10 October. The 10 October release enabled `counterEnabled`; all 117 production assets and actual native Safari receipt for both collectors were verified. The 11 October anchored-arrival correction is pending release.
 
 The earlier claim that avoiding Umami's individual-session views makes its retained individual visit records eligible for the statistical-purpose exception was unsupported. That claim is withdrawn. Umami is now consent-only. Existing Umami page and section/action/time scope remains unchanged; no identification, replay, form capture or per-letter analytics is added.
 
 ## Default aggregate contract
 
 - Only allowlisted root public pages; Share ideas, Corrections, next-steps and unknown routes remain excluded. Canonical hostname only. Queries/fragments never leave the page.
-- New visitors see an in-flow notice with How statistics work, Review choices and Turn analytics off. At least half of the explanation must enter the viewport before default collection starts. Anchors or restored Back positions can skip it: never scroll or focus visitors into analytics to obtain a count.
+- New visitors see an in-flow notice with How statistics work, Review choices and Turn analytics off. The compact notice sits in the persistent page-navigation area, including anchored arrivals. Its explanation and Off control must be visible before default collection starts; never scroll or focus visitors into analytics to obtain a count.
 - No opt-in is required for this tier. Saved refusal, Do Not Track, Global Privacy Control, unavailable storage and unavailable config stop both tiers.
 - Daily page opens, fixed broad sources, coarse viewport groups, section reach/ten-second visibility, active-time thresholds and selected action opens. Independent counters, not visitor histories. Source and viewport totals are global, not crossed with pages or each other. Sections are broad editorial sections, never individual letters/questions/private inputs.
 - Requests contain at most 1,024 bytes and three fixed metric/label pairs. Extra fields, unknown labels, duplicate pairs, wrong origins, privacy headers, malformed bodies and unsupported methods are rejected before storage. Parameterised atomic SQL directly increments totals. No individual event rows, IP, UA, cookie, identity, exact timestamp or persistent retry queue is retained by the application.

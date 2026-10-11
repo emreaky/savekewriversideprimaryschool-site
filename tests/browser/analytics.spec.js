@@ -1,6 +1,7 @@
 const { test, expect, captureSubmissions, revealLetterChoices } = require('./fixtures');
 const { readFileSync, readdirSync } = require('node:fs');
 const path = require('node:path');
+const { execFileSync } = require('node:child_process');
 
 const root = path.resolve(__dirname, '../..');
 const origin = 'https://savekewriversideprimaryschool.org';
@@ -177,17 +178,42 @@ test('First visit starts aggregate statistics without enabling Umami', async ({ 
   expect(events(sent, 'Section reached')).toEqual([]);
 });
 
-test('An anchored first visit waits for presentation without moving the visitor', async ({ page, context }) => {
-  const { sent, aggregates } = await virtualProduction(context);
-  await page.goto(site + 'evidence.html#gaps');
-  await expect(page.locator('#gaps')).toBeInViewport();
-  await page.waitForTimeout(250);
-  expect(aggregates).toEqual([]);
-  expect(sent).toEqual([]);
-  await page.locator('.analytics-invitation').scrollIntoViewIfNeeded();
-  await expect.poll(() => aggregates.filter(r => r.body.counters.some(c => c.metric === 'page')).length).toBe(1);
-  expect(sent).toEqual([]);
-});
+for (const target of ['proposal.html#parent-plan', 'letters.html#letter-form', 'evidence.html#gaps']) {
+  for (const old of ['', 'https://savekewriverside.org/', 'https://ystoneman.github.io/kew-riverside-website/']) {
+    test(`Fresh anchored arrival counts once without moving the visitor: ${old || 'direct'} ${target}`, async ({ page, context }) => {
+      const { sent, aggregates } = await virtualProduction(context);
+      if (old) {
+        const legacy = new URL(old);
+        await context.route(legacy.origin + '/**', async route => {
+          expect(route.request().method()).toBe('GET');
+          const name = new URL(route.request().url()).pathname.slice(legacy.pathname.length);
+          if (name === 'cutover-redirect.js') return route.fulfill({ contentType: 'text/javascript', body: readFileSync(path.join(root, '.github/scripts/old_site_redirect.js')) });
+          if (name === 'cutover.css') return route.fulfill({ contentType: 'text/css', body: readFileSync(path.join(root, '.github/scripts/old_site_redirect.css')) });
+          expect(name).toBe(target.split('#')[0]);
+          const body = execFileSync('python3', ['-c', "import sys;sys.path.insert(0,'.github/scripts');from build_old_site_redirect import page;print(page(sys.argv[1]))", name], { cwd: root });
+          return route.fulfill({ contentType: 'text/html', body });
+        });
+      }
+      await page.goto((old || site) + target);
+      await expect(page).toHaveURL(site + target);
+      const section = page.locator('#' + target.split('#')[1]);
+      await expect(section).toBeInViewport();
+      const invitation = page.locator('.site-orientation .analytics-invitation');
+      await expect(invitation.getByRole('button', { name: 'Turn analytics off', exact: true })).toBeInViewport();
+      await expect.poll(() => aggregates.filter(r => r.body.counters.some(c => c.metric === 'page')).length).toBe(1);
+      const position = await page.evaluate(() => ({ y: scrollY, top: document.querySelector(location.hash).getBoundingClientRect().top, bar: document.querySelector('.site-orientation').getBoundingClientRect().bottom }));
+      expect(position.top).toBeGreaterThanOrEqual(position.bar - 1);
+      expect(sent).toEqual([]);
+      expect(await page.evaluate(key => localStorage.getItem(key), choiceKey)).toBeNull();
+      await invitation.getByRole('button', { name: 'Turn analytics off', exact: true }).click();
+      await expect(page.locator('.site-orientation .mobile-menu > summary')).toBeFocused();
+      await expect(section).toBeInViewport();
+      await page.waitForTimeout(250);
+      expect(aggregates.filter(r => r.body.counters.some(c => c.metric === 'page'))).toHaveLength(1);
+      expect(sent).toEqual([]);
+    });
+  }
+}
 
 test('The aggregate default records reviewed interactions without Umami or identifiers', async ({ page, context }) => {
   const { sent, aggregates } = await virtualProduction(context);

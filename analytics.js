@@ -252,12 +252,13 @@
     if (!invitation) return;
     invitation.hidden = (configLoaded && config?.enabled !== true) || !storageOK || browserObjects() || Boolean(choice);
     for (const el of invitation.querySelectorAll('button')) el.disabled = config?.enabled !== true;
+    measureNotice();
   }
   function restoreFocus() {
     let target = opener;
     const visible = element => element?.isConnected && !element.closest('[hidden]') && element.getClientRects().length;
     if (!visible(target)) {
-      target = invitation?.nextElementSibling || invitation?.parentElement.nextElementSibling;
+      target = document.querySelector('.site-orientation .mobile-menu > summary') || invitation?.nextElementSibling || invitation?.parentElement.nextElementSibling;
       while (target && !visible(target)) target = target.nextElementSibling;
       if (!visible(target)) target = document.querySelector('main h1');
       if (target && !target.hasAttribute('tabindex')) target.tabIndex = -1;
@@ -293,42 +294,39 @@
     panel.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
     update();
   }
+  function measureNotice() {
+    const bar = invitation?.closest('.site-orientation');
+    if (bar) document.documentElement.style.setProperty('--nav-height', bar.getBoundingClientRect().height + 'px');
+  }
   function buildInvitation() {
     invitation = node('section', '', 'analytics-invitation');
     invitation.setAttribute('aria-labelledby', 'analytics-invitation-title');
-    const title = node('p', 'Aggregate statistics on. Detailed off.');
+    const title = node('p', 'Site statistics on. Detailed off.');
     title.id = 'analytics-invitation-title';
     const actions = node('div', '', 'analytics-actions');
     const review = button('Choices', () => { open(review); });
     review.setAttribute('aria-label', 'Review choices');
-    const refuse = button('Turn off', () => { opener = refuse; persist('deny'); restoreFocus(); });
+    const refuse = button('Off', () => { opener = refuse; persist('deny'); restoreFocus(); });
     refuse.setAttribute('aria-label', 'Turn analytics off');
     const more = node('a', 'Why?'); more.setAttribute('aria-label', 'How statistics work'); more.href = 'privacy.html#analytics';
     title.append(' ', more);
     actions.append(review, refuse); invitation.append(title, actions);
-    // Insert synchronously after the arrival content, before config resolves.
-    // No automatic focus, overlay, or delayed insertion above a focused control.
-    const main = document.querySelector('main');
-    let after = main?.querySelector('.parent-plan-spotlight, #upload-step-two');
-    const letterIntro = main?.querySelector('.invite-hero');
-    if (letterIntro) {
-      letterIntro.append(invitation);
-    } else {
-    if (!after) {
-      after = main?.querySelector('h1');
-      if (after?.nextElementSibling?.tagName === 'P') after = after.nextElementSibling;
-    }
-    if (after) after.after(invitation);
-    else main?.append(invitation);
-    }
-    // Anchored arrivals and Back may skip the notice. Never scroll or move focus
-    // to analytics; collect only once at least half of its explanation is visible.
+    // Keep the explanation and objection available at deep-link arrivals too.
+    // Insertion is synchronous, before initial fragment positioning. The existing
+    // navigation ResizeObserver continues to maintain height after reflow.
+    const bar = document.querySelector('.site-orientation');
+    if (!bar) return;
+    invitation.classList.add('wrap');
+    bar.append(invitation);
+    measureNotice();
+    // Collection starts only once the whole compact notice, including Off, is
+    // visible. Never scroll or move focus to make a visitor countable.
     observer = new IntersectionObserver(entries => {
-      if (entries.some(entry => entry.intersectionRatio >= .5)) {
+      if (entries.some(entry => entry.intersectionRatio >= 1)) {
         noticePresented = true; observer.disconnect(); start();
       }
-    }, { threshold: .5 });
-    observer.observe(title);
+    }, { threshold: 1 });
+    observer.observe(invitation);
   }
   function action(event) {
     if (!counting()) return;
