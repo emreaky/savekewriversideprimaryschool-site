@@ -15,6 +15,7 @@ class LegacyArtifactTests(unittest.TestCase):
   expected=asset_files()|GENERATED|{f for f in PUBLIC_FILES if f.endswith('.html')}
   files={p.relative_to(self.output).as_posix() for p in self.output.rglob('*') if p.is_file()}
   self.assertEqual(files,expected); self.assertEqual(count,len(expected))
+  self.assertNotIn('sitemap.xml',files); self.assertNotIn('robots.txt',files)
   self.assertNotIn('CNAME',files); self.assertNotIn('letters.js',files); self.assertNotIn('analytics.js',files)
   for f in asset_files()|{'visit/index.html'}:
    self.assertEqual((self.output/f).read_bytes(),(self.source/f).read_bytes(),f)
