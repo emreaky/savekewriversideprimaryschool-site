@@ -2,6 +2,12 @@
 
 ## Unreleased
 
+### Lawyer involvement in selected school reprieves — 11 October 2026
+
+- Add a repository-only research memo, twelve-school CSV and dated source register: four explicit lawyer cases, three additional reports of legal advice being taken/sought, and five unknowns. Separate all-stage reprieves from the three initial-consultation outcomes and preserve school/episode counts, advice timing and renewed closure risk.
+- Keep legal-support presence distinct from effectiveness, paid legal spending and permanent rescue. The existing published lessons report and public asset list are unchanged; register the new research paths explicitly as maintenance files.
+- Independent evidence planning and actual-artifact reviews completed. Correct advice-sought versus advice-received wording, Godshill's pre-consultation timing and the distinction between five activity-unknown and eight lawyer-unverified cases. All 71 Python tests, the 117-public-file repository validator, diff whitespace and audit ID/count/source checks pass. Research is repository-only; no website deployment is included.
+
 ### Count arrivals at shared sections — 11 October 2026
 
 - Confirmed old-home and GitHub-letter redirects reach the canonical site, but fresh visitors arriving at a section could remain uncounted because the first-visit notice was above the viewport.
