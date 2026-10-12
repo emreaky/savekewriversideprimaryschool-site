@@ -32,6 +32,7 @@ og-home.png og-letters.png og-ideas.png og-videos.png
 og-fundraising-trustees-v1.png og-fundraising-admin-v1.png
 '''.split())
 MAINTENANCE_FILES = frozenset('''
+landing.html landing.css landing.js landing-theme.js images/landing-school-960.jpg images/landing-school-1280.jpg images/landing-school-1672.jpg images/school-logo-384.png
 SEO-OPERATIONS.md .github/scripts/build_seo.py .github/scripts/test_seo.py tests/browser/seo.spec.js
 SEO-IMPLEMENTATION-PLAN.md
 tests/browser/campaign.spec.js
@@ -78,8 +79,11 @@ def require(ok, message):
 
 
 class Page(HTMLParser):
-    def __init__(self, text):
+    def __init__(self, text, resources=PUBLIC_FILES):
         super().__init__()
+        # Local files this page may load. Unpublished maintenance pages may also load
+        # their own unpublished assets; published pages are limited to PUBLIC_FILES.
+        self.resources = resources
         self.csp = False
         self.referrer = False
         self.inputs = {}
@@ -102,7 +106,7 @@ class Page(HTMLParser):
         if tag == 'script':
             script = urlsplit(a.get('src', ''))
             require(not script.scheme and not script.netloc and not script.fragment
-                    and script.path in PUBLIC_FILES and script.path.endswith('.js')
+                    and script.path in self.resources and script.path.endswith('.js')
                     and (not script.query or re.fullmatch(r'v=[0-9]+', script.query)),
                     'Only reviewed local scripts with optional numeric versions are allowed.')
         if tag in {'link', 'img'}:
@@ -112,11 +116,11 @@ class Page(HTMLParser):
                 if tag == 'link' and a.get('rel') == 'stylesheet':
                     stylesheet = urlsplit(resource or '')
                     require(not stylesheet.scheme and not stylesheet.netloc and not stylesheet.fragment
-                            and stylesheet.path in PUBLIC_FILES and stylesheet.path.endswith('.css')
+                            and stylesheet.path in self.resources and stylesheet.path.endswith('.css')
                             and (not stylesheet.query or re.fullmatch(r'v=[0-9]+', stylesheet.query)),
                             'Only reviewed local stylesheets with optional numeric versions are allowed.')
                 else:
-                    require(resource in PUBLIC_FILES, 'Unexpected external or missing resource.')
+                    require(resource in self.resources, 'Unexpected external or missing resource.')
         if tag == 'a':
             url = urlsplit(a.get('href', ''))
             require(url.scheme in {'', 'https', 'mailto'}, 'Unsafe link scheme.')
@@ -141,7 +145,7 @@ def validate_site(root=ROOT):
         data = p.read_bytes().decode('utf-8', errors='replace')
         require(not any(re.search(pattern, data) for pattern in SECRET_PATTERNS), 'Possible credential in ' + name + ' (value withheld).')
         if name.endswith('.html'):
-            page = Page(data)
+            page = Page(data, PUBLIC_FILES if name in PUBLIC_FILES else PUBLIC_FILES | MAINTENANCE_FILES)
             if name == 'letters.html':
                 require(all('disabled' in page.inputs.get(field, {}) for field in ('council-name', 'council-postcode')), 'Council identity must be disabled before consent is checked.')
                 for field, value in {
